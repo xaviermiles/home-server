@@ -1,0 +1,25 @@
+username: arya
+packages:
+  - vim
+  - htop
+  - neofetch
+  - git
+
+enable_electron_cloud: true
+
+# Docker
+timezone: Pacific/Auckland
+guid: "1000"
+
+docker_deps:
+  - 'apt-transport-https'
+  - 'ca-certificates'
+  - 'curl'
+  - 'software-properties-common'
+  - 'python3-pip'
+  - 'virtualenv'
+  - 'python3-setuptools'
+  - 'docker-compose'
+docker_packages:
+  - 'docker-ce'
+  - 'docker-compose'

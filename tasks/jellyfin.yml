@@ -1,0 +1,31 @@
+---
+# - name: QuickSync packages
+#   become: yes
+#   package:
+#    name:
+#    - vainfo
+#    - intel-media-va-driver-non-free
+
+- name: Setup jellyfin container
+  docker_container:
+    name: jellyfin
+    image: lscr.io/linuxserver/jellyfin
+    pull: yes
+    # privileged: yes
+    container_default_behavior: no_defaults
+    env:
+      "PUID": "{{ guid }}"
+      "PGID": "{{ guid }}"
+      "TZ": "{{ timezone }}"
+      "VERSION": "latest"
+      # "DOCKER_MODS": "linuxserver/mods:jellyfin-opencl-intel"
+    published_ports:
+    - 8096:8096
+    restart_policy: unless-stopped
+
+- name: Add to reverse-proxy network
+  docker_network:
+    name: electron_cloud
+    connected: ["jellyfin"]
+    appends: yes
+  when: enable_electron_cloud
