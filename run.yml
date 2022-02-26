@@ -6,3 +6,4 @@
     - import_tasks: tasks/essential.yml
     - import_tasks: tasks/docker.yml
     - import_tasks: tasks/jellyfin.yml
+    - import_tasks: tasks/gitea.yml

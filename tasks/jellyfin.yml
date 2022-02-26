@@ -23,7 +23,7 @@
     - 8096:8096
     restart_policy: unless-stopped
 
-- name: Add to reverse-proxy network
+- name: Add jellyfin container to network
   docker_network:
     name: electron_cloud
     connected: ["jellyfin"]

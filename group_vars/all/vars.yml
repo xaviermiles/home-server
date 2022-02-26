@@ -4,6 +4,7 @@ packages:
   - htop
   - neofetch
   - git
+  - net-tools
 
 enable_electron_cloud: true
 
@@ -23,3 +24,14 @@ docker_deps:
 docker_packages:
   - 'docker-ce'
   - 'docker-compose'
+
+# Gitea
+gitea_user: gitea
+gitea_group: gitea
+gitea_home: "/var/lib/gitea"
+gitea_repository_root: "{{ gitea_home }}"
+gitea_network: giteaNET
+gitea_dependencies:
+  - git
+  - gnupg2
+  - xz-utils

@@ -1,0 +1,91 @@
+---
+- name: Install gitea dependencies
+  package:
+    name: "{{ gitea_dependencies }}"
+    state: latest
+
+- name: "Create Gitea Group"
+  group:
+    name: "{{ gitea_group }}"
+    system: true
+    state: "present"
+
+- name: "Create Gitea user"
+  user:
+    name: "{{ gitea_user }}"
+    home: "{{ gitea_home }}"
+    shell: "/bin/false"
+    system: true
+
+- name: Create config and data directory
+  file:
+    path: "/etc/gitea"
+    state: directory
+    owner: "{{ gitea_user }}"
+    group: "{{ gitea_group }}"
+    mode: "0755"
+
+- name: Create data directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ gitea_user }}"
+    group: "{{ gitea_group }}"
+    mode: "u=rwX,g=rX,o="
+    recurse: true
+  with_items:
+    - "{{ gitea_home }}"
+    - "{{ gitea_home }}/data"
+    - "{{ gitea_home }}/custom"
+    - "{{ gitea_home }}/custom/https"
+    - "{{ gitea_home }}/custom/mailer"
+    - "{{ gitea_home }}/indexers"
+    - "{{ gitea_home }}/log"
+    - "{{ gitea_repository_root }}"
+
+- name: Create gitea network
+  docker_network:
+    name: "{{ gitea_network }}"
+    state: present
+
+- name: Database for gitea
+  docker_container:
+    name: gitea_mysql_db
+    image: mysql/mysql-server
+    env:
+      "MYSQL_ROOT_PASSWORD": "gitea"
+      "MYSQL_USER": "gitea"
+      "MYSQL_PASSWORD": "gitea"
+      "MYSQL_DATABASE": "gitea"
+    networks:
+      - name: "{{ gitea_network }}"
+    restart_policy: always
+
+- name: Setup gitea container
+  docker_container:
+    name: gitea
+    image: gitea/gitea
+    pull: yes
+    env:
+      "USER_UID": "{{ guid }}"
+      "USER_GID": "{{ guid }}"
+      "GITEA__database__DB_TYPE": "mysql"
+      "GITEA__database_HOST": "db:3306"
+      "GITEA__database__NAME": "gitea"
+      "GITEA__database__USER": "gitea"
+      "GITEA__database__PASSWD": "gitea"
+    networks:
+      - name: "{{ gitea_network }}"
+        links:
+          - gitea_mysql_db:db
+    published_ports:
+      - "3000:3000"
+      - "2221:22"
+    restart_policy: always
+
+- name: Add gitea container to network
+  docker_network:
+    name: electron_cloud
+    connected: ["gitea"]
+    appends: yes
+  when: enable_electron_cloud
