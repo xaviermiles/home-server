@@ -36,10 +36,6 @@
   with_items:
     - "{{ gitea_home }}"
     - "{{ gitea_home }}/data"
-    - "{{ gitea_home }}/custom"
-    - "{{ gitea_home }}/custom/https"
-    - "{{ gitea_home }}/custom/mailer"
-    - "{{ gitea_home }}/indexers"
     - "{{ gitea_home }}/log"
     - "{{ gitea_repository_root }}"
 
@@ -65,7 +61,7 @@
   docker_container:
     name: gitea
     image: gitea/gitea
-    pull: yes
+    pull: true
     env:
       "USER_UID": "{{ guid }}"
       "USER_GID": "{{ guid }}"
@@ -87,5 +83,5 @@
   docker_network:
     name: electron_cloud
     connected: ["gitea"]
-    appends: yes
+    appends: true
   when: enable_electron_cloud

@@ -1,6 +1,6 @@
 ---
 # - name: QuickSync packages
-#   become: yes
+#   become: true
 #   package:
 #    name:
 #    - vainfo
@@ -10,8 +10,8 @@
   docker_container:
     name: jellyfin
     image: lscr.io/linuxserver/jellyfin
-    pull: yes
-    # privileged: yes
+    pull: true
+    # privileged: true
     container_default_behavior: no_defaults
     env:
       "PUID": "{{ guid }}"
@@ -27,5 +27,5 @@
   docker_network:
     name: electron_cloud
     connected: ["jellyfin"]
-    appends: yes
+    appends: true
   when: enable_electron_cloud
