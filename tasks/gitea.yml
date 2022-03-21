@@ -53,6 +53,8 @@
       "MYSQL_USER": "gitea"
       "MYSQL_PASSWORD": "gitea"
       "MYSQL_DATABASE": "gitea"
+    volumes:
+      - ./mysql:/var/lib/mysql
     networks:
       - name: "{{ gitea_network }}"
     restart_policy: always
@@ -75,7 +77,7 @@
         links:
           - gitea_mysql_db:db
     published_ports:
-      - "3000:3000"
+      - "8080:3000"
       - "2221:22"
     restart_policy: always
 
