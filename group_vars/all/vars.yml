@@ -36,3 +36,6 @@ gitea_dependencies:
   - git
   - gnupg2
   - xz-utils
+
+# AdGuardHome
+external_dns_server: 1.1.1.1

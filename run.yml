@@ -7,3 +7,4 @@
     - import_tasks: tasks/docker.yml
     - import_tasks: tasks/jellyfin.yml
     - import_tasks: tasks/gitea.yml
+    - import_tasks: tasks/adguardhome.yml
